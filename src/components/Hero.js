@@ -20,7 +20,7 @@ const Hero = () => {
 
     return (
         <Stack m={'0, auto'} minH={'100vh'} direction={{ base: 'column', md: 'row' }} alignItems={'center'} justifyContent={'center'}>
-            <Flex p={8} flex={1} align={'center'} justify={'center'} bg={'gray.800'}>
+            <Flex p={8} flex={1} align={'center'} justify={'center'}>
                 <Stack spacing={6} w={'full'} maxW={'lg'}>
                     <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }} color={'white'}>
                         <Text color={'red.700'} as={'span'}>
