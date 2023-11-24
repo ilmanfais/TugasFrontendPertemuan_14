@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch&family=Lexend:wght@300&family=Poppins:wght@300;400;500;600&family=Quicksand:wght@500;700&display=swap');
+
+
+body {
+  margin: 0;
+  background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(52,150,63,1) 50%, rgba(0,0,0,1) 100%);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
