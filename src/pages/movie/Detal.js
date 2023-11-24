@@ -15,6 +15,9 @@ import {
   Container,
   VStack,
 } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import GetDetailMovie from '../../utils/networks/GetDetailMovie'
 
 
 const BlogTags = (props) => {
@@ -33,6 +36,7 @@ const BlogTags = (props) => {
   )
 }
 
+
 const BlogAuthor = (props) => {
   return (
     <HStack marginTop="2" spacing="2" display="flex" alignItems="center">
@@ -49,32 +53,66 @@ const BlogAuthor = (props) => {
   )
 }
 
-const ArticleList = () => {
+const Detail = () => {
+
+  const { id } = useParams()
+  const [movie, setMovie] = useState({})
+  const [genres, setGenres] = useState([])
+
+  const url_image = `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
+  const backdropUrl = `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`;
+  const [productionCompanies, setProductionCompanies] = useState([]);
+
+  const getDetail = async (id) => {
+    const data = await GetDetailMovie(id)
+    await setMovie(data)
+    await setGenres(data.genres)
+    await setProductionCompanies(data.production_companies);
+  }
+
+  useEffect(() => {
+    getDetail(id)
+  }, [id]);
+
+  console.log(movie);
+
   return (
-    <Container maxW={'7xl'} p="12">
-      <Heading as="h1">{movie.original_title}</Heading>
+    <Container
+      maxW={'7xl'}
+      p="12"
+      backgroundImage={`url(${backdropUrl})`}
+      backgroundSize="cover"
+      backgroundPosition="center"
+      backgroundRepeat="no-repeat"
+      filter="brightness(0.9)"
+      color={useColorModeValue('black', 'white')}
+    >
+      <Heading as="h1" color={useColorModeValue('black', 'white')}>
+        {movie.original_title}
+      </Heading>
       <Box
         marginTop={{ base: '1', sm: '5' }}
         display="flex"
         flexDirection={{ base: 'column', sm: 'row' }}
-        justifyContent="space-between">
+        justifyContent="space-between"
+      >
         <Box
           display="flex"
           flex="1"
           marginRight="3"
           position="relative"
-          alignItems="center">
+          alignItems="center"
+        >
           <Box
             width={{ base: '100%', sm: '85%' }}
             zIndex="2"
             marginLeft={{ base: '0', sm: '5%' }}
-            marginTop="5%">
+            marginTop="5%"
+          >
             <Box textDecoration="none" _hover={{ textDecoration: 'none' }}>
               <Image
                 borderRadius="lg"
-                src={
-                  'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=800&q=80'
-                }
+                src={url_image}
                 alt="some good alt text"
                 objectFit="contain"
               />
@@ -97,11 +135,12 @@ const ArticleList = () => {
           flex="1"
           flexDirection="column"
           justifyContent="center"
-          marginTop={{ base: '3', sm: '0' }}>
-          <BlogTags tags={['Engineering', 'Product']} />
+          marginTop={{ base: '3', sm: '0' }}
+        >
+          <BlogTags tags={genres.map(genre => genre.name)} />
           <Heading marginTop="1">
             <Text textDecoration="none" _hover={{ textDecoration: 'none' }}>
-              Blog article title
+              {movie.tagline}
             </Text>
           </Heading>
           <Text
@@ -109,80 +148,29 @@ const ArticleList = () => {
             marginTop="2"
             color={useColorModeValue('gray.700', 'gray.200')}
             fontSize="lg">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            Lorem Ipsum has been the industry&apos;s standard dummy text ever since the
-            1500s, when an unknown printer took a galley of type and scrambled it to make
-            a type specimen book.
+            {movie.overview}
           </Text>
+          <Box marginTop="2">
+            <Text fontWeight="semibold">Release Date:</Text>
+            <Text>{movie.release_date}</Text>
+          </Box>
+          <Box marginTop="2">
+            <Text fontWeight="semibold">Popularity:</Text>
+            <Text>{movie.popularity}</Text>
+          </Box>
+          <Box marginTop="2">
+            <Text fontWeight="semibold">Vote Average:</Text>
+            <Text>{movie.vote_average}</Text>
+          </Box>
+          <Box marginTop="2">
+            <Text fontWeight="semibold">Genres:</Text>
+            <Text>{genres.map(genre => genre.name).join(', ')}</Text>
+          </Box>
           <BlogAuthor name="John Doe" date={new Date('2021-04-06T19:01:27Z')} />
         </Box>
       </Box>
-      <Heading as="h2" marginTop="5">
-        Latest articles
-      </Heading>
-      <Divider marginTop="5" />
-      <Wrap spacing="30px" marginTop="5">
-        <WrapItem width={{ base: '100%', sm: '45%', md: '45%', lg: '30%' }}>
-          <Box w="100%">
-            <Box borderRadius="lg" overflow="hidden">
-              <Box textDecoration="none" _hover={{ textDecoration: 'none' }}>
-                <Image
-                  transform="scale(1.0)"
-                  src={
-                    'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=800&q=80'
-                  }
-                  alt="some text"
-                  objectFit="contain"
-                  width="100%"
-                  transition="0.3s ease-in-out"
-                  _hover={{
-                    transform: 'scale(1.05)',
-                  }}
-                />
-              </Box>
-            </Box>
-            <BlogTags tags={['Engineering', 'Product']} marginTop={3} />
-            <Heading fontSize="xl" marginTop="2">
-              <Text textDecoration="none" _hover={{ textDecoration: 'none' }}>
-                Some blog title
-              </Text>
-            </Heading>
-            <Text as="p" fontSize="md" marginTop="2">
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-              Lorem Ipsum has been the industry&apos;s standard dummy text ever since the
-              1500s, when an unknown printer took a galley of type and scrambled it to
-              make a type specimen book.
-            </Text>
-            <BlogAuthor name="John Doe" date={new Date('2021-04-06T19:01:27Z')} />
-          </Box>
-        </WrapItem>
-      </Wrap>
-      <VStack paddingTop="40px" spacing="2" alignItems="flex-start">
-        <Heading as="h2">What we write about</Heading>
-        <Text as="p" fontSize="lg">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec condimentum quam
-          arcu, eu tempus tortor molestie at. Vestibulum pretium condimentum dignissim.
-          Vestibulum ultrices vitae nisi sed imperdiet. Mauris quis erat consequat,
-          commodo massa quis, feugiat sapien. Suspendisse placerat vulputate posuere.
-          Curabitur neque tortor, mattis nec lacus non, placerat congue elit.
-        </Text>
-        <Text as="p" fontSize="lg">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec condimentum quam
-          arcu, eu tempus tortor molestie at. Vestibulum pretium condimentum dignissim.
-          Vestibulum ultrices vitae nisi sed imperdiet. Mauris quis erat consequat,
-          commodo massa quis, feugiat sapien. Suspendisse placerat vulputate posuere.
-          Curabitur neque tortor, mattis nec lacus non, placerat congue elit.
-        </Text>
-        <Text as="p" fontSize="lg">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec condimentum quam
-          arcu, eu tempus tortor molestie at. Vestibulum pretium condimentum dignissim.
-          Vestibulum ultrices vitae nisi sed imperdiet. Mauris quis erat consequat,
-          commodo massa quis, feugiat sapien. Suspendisse placerat vulputate posuere.
-          Curabitur neque tortor, mattis nec lacus non, placerat congue elit.
-        </Text>
-      </VStack>
     </Container>
-  )
+  );
 }
 
-export default ArticleList
+export default Detail

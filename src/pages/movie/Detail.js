@@ -1,163 +1,230 @@
-import React, { useEffect, useState } from 'react';
-import GetDetailMovie from '../../utils/networks/GetDetailMovie';
-import { useParams } from 'react-router-dom';
-import Button from '../../components/ui/Button';
-import styled from 'styled-components';
+"use client";
+
+import {
+  Box,
+  chakra,
+  Container,
+  Stack,
+  Text,
+  Image,
+  Flex,
+  VStack,
+  Button,
+  Heading,
+  SimpleGrid,
+  StackDivider,
+  useColorModeValue,
+  List,
+  ListItem,
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { MdLocalShipping } from "react-icons/md";
+import { useParams } from "react-router-dom";
+import GetDetailMovie from "../../utils/networks/GetDetailMovie";
 
 const Detail = () => {
-    const { id } = useParams()
-    const [movie, setMovie] = useState({})
-    const [genres, setGenres] = useState([])
+  const { id } = useParams();
+  const [movie, setMovie] = useState({});
+  const [genres, setGenres] = useState([]);
+  const [productionCompanies, setProductionCompanies] = useState([]);
 
-    const url_image = `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
-    const backdropUrl = `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`;
-    const [productionCompanies, setProductionCompanies] = useState([]);
+  const url_image = `https://image.tmdb.org/t/p/w300/${movie.poster_path}`;
+  const backdropUrl = `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`;
 
-    const getDetail = async (id) => {
-        const data = await GetDetailMovie(id)
-        await setMovie(data)
-        await setGenres(data.genres)
-        await setProductionCompanies(data.production_companies);
-    }
+  const getDetail = async (id) => {
+    const data = await GetDetailMovie(id);
+    await setMovie(data);
+    await setGenres(data.genres);
+    await setProductionCompanies(data.production_companies);
+  };
 
-    useEffect(() => {
-        getDetail(id)
-    }, [id]);
+  useEffect(() => {
+    getDetail(id);
+  }, [id]);
 
-    console.log(movie);
+  return (
+    <Container maxW={"7xl"}>
+      <SimpleGrid
+        columns={{ base: 1, lg: 2 }}
+        spacing={{ base: 8, md: 10 }}
+        py={{ base: 18, md: 24 }}
+      >
+        <Flex>
+          <Image
+            rounded={"md"}
+            alt={"product image"}
+            src={url_image}
+            alignItems={"center"}
+            justifyContent={"center"}
+            w={{ base: "100%", sm: "400px", lg: "300px" }}
+            h={{ base: "100%", sm: "600px", lg: "500px" }}
+          />
+        </Flex>
+        <Stack spacing={{ base: 6, md: 10 }}>
+          <Box as={"header"}>
+            <Heading
+              lineHeight={1.1}
+              fontWeight={600}
+              fontSize={{ base: "2xl", sm: "4xl", lg: "5xl" }}
+            >
+              {movie.title}
+            </Heading>
+            <Text
+              color={useColorModeValue("gray.900", "gray.400")}
+              fontWeight={300}
+              fontSize={"2xl"}
+            >
+              {movie.tagline}
+            </Text>
+          </Box>
 
-    return (
-        <DetailStyle className="container"  >
-            <section className="hero" style={{ backgroundImage: `url(${backdropUrl})` }}>
-            <div className="hero__overlay">
-                <div className="hero__left">
-                    <h2 className="hero__title">{movie.original_title}</h2>
-                    <h3 className="hero__tagline">{movie.tagline}</h3>
-                    <p className="hero__desc">{movie.overview}</p>
-                    {
-                        genres.map(
-                            function (item) {
-                                return (
-                                    <p className="hero__genre">{item.name}</p>
-                                )
-                            }
-                        )
-                    }
-                    <p className="hero__date">{movie.release_date}</p>
-                    <div className="hero__production-companies">
-                        <h4>Production Companies:</h4>
-                        <ul>
-                            {productionCompanies.map((company) => (
-                                <li key={company.id}>
-                                    {company.logo_path && (
-                                        <img
-                                            src={`https://image.tmdb.org/t/p/w92/${company.logo_path}`}
-                                            alt={`${company.name} Logo`}
-                                        />
-                                    )}
-                                    <span>{company.name}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <Button variant="primary">Wacth</Button>
-                </div>
-            </div>
-                <div className="hero__right">
-                    <img className="hero__image" src={url_image} alt='' />
-                </div>
-            </section>
-        </DetailStyle>
-    );
-}
+          <Stack
+            spacing={{ base: 4, sm: 6 }}
+            direction={"column"}
+            divider={
+              <StackDivider
+                borderColor={useColorModeValue("gray.200", "gray.600")}
+              />
+            }
+          >
+            <VStack spacing={{ base: 4, sm: 6 }}>
+              <Text fontSize={"lg"}>{movie.overview}</Text>
+            </VStack>
+            <Box>
+              <Text
+                fontSize={{ base: "16px", lg: "18px" }}
+                color={useColorModeValue("yellow.500", "yellow.300")}
+                fontWeight={"500"}
+                textTransform={"uppercase"}
+                mb={"4"}
+              >
+                Film Details
+              </Text>
 
-const DetailStyle = styled.div`
-    .container {
-         margin: 1rem;
-    }
+              <List spacing={2}>
+                <ListItem>
+                  <Text as={"span"} fontWeight={"bold"}>
+                    Between lugs:
+                  </Text>{" "}
+                  20 mm
+                </ListItem>
+                <ListItem>
+                  <Text as={"span"} fontWeight={"bold"}>
+                    Bracelet:
+                  </Text>{" "}
+                  leather strap
+                </ListItem>
+                <ListItem>
+                  <Text as={"span"} fontWeight={"bold"}>
+                    Case:
+                  </Text>{" "}
+                  Steel
+                </ListItem>
+                <ListItem>
+                  <Text as={"span"} fontWeight={"bold"}>
+                    Case diameter:
+                  </Text>{" "}
+                  42 mm
+                </ListItem>
+                <ListItem>
+                  <Text as={"span"} fontWeight={"bold"}>
+                    Dial color:
+                  </Text>{" "}
+                  Black
+                </ListItem>
+                <ListItem>
+                  <Text as={"span"} fontWeight={"bold"}>
+                    Crystal:
+                  </Text>{" "}
+                  Domed, scratch‑resistant sapphire crystal with anti‑reflective
+                  treatment inside
+                </ListItem>
+                <ListItem>
+                  <Text as={"span"} fontWeight={"bold"}>
+                    Water resistance:
+                  </Text>{" "}
+                  5 bar (50 metres / 167 feet){" "}
+                </ListItem>
+              </List>
+            </Box>
 
-    .hero {
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-    }
+            <Text
+              fontSize={{ base: "16px", lg: "18px" }}
+              color={useColorModeValue("yellow.500", "yellow.300")}
+              fontWeight={"500"}
+              textTransform={"uppercase"}
+              mb={"4"}
+            >
+              Duration
+            </Text>
+            <Text fontSize={"lg"}>{movie.runtime} minutes</Text>
 
-  .hero__left {
-    color: #fff; 
-  }
+            <Text
+              fontSize={{ base: "16px", lg: "18px" }}
+              color={useColorModeValue("yellow.500", "yellow.300")}
+              fontWeight={"500"}
+              textTransform={"uppercase"}
+              mb={"4"}
+            >
+              Release Date
+            </Text>
+            <Text fontSize={"lg"}>{movie.release_date}</Text>
 
-  .hero__title {
-    font-size: 2.5rem;
-  }
+            <Text
+              fontSize={{ base: "16px", lg: "18px" }}
+              color={useColorModeValue("yellow.500", "yellow.300")}
+              fontWeight={"500"}
+              textTransform={"uppercase"}
+              mb={"4"}
+            >
+              Genre
+            </Text>
+            <VStack spacing={{ base: 4, sm: 6 }}>
+              {genres.map((genre) => (
+                <Text key={genre.id} fontSize={"lg"}>
+                  {genre.name}
+                </Text>
+              ))}
+            </VStack>
 
-  .hero__tagline {
-    font-size: 1.5rem;
-  }
+            <Text
+              fontSize={{ base: "16px", lg: "18px" }}
+              color={useColorModeValue("yellow.500", "yellow.300")}
+              fontWeight={"500"}
+              textTransform={"uppercase"}
+              mb={"4"}
+            >
+              Production Companies
+            </Text>
+            <VStack spacing={{ base: 4, sm: 6 }}>
+              {productionCompanies.map((company) => (
+                <Text key={company.id} fontSize={"lg"}>
+                  {company.name}
+                </Text>
+              ))}
+            </VStack>
+          </Stack>
 
-  .hero__desc {
-    font-size: 1.2rem;
-  }
-
-  .hero__genres {
-    margin-bottom: 1rem;
-
-    .hero__genre {
-      color: #fff;
-      margin-right: 0.5rem;
-      margin-bottom: 0.5rem;
-      font-size: 1rem;
-      font-weight: bold;
-      padding: 0.3rem 0.5rem;
-      background-color: #2c3e50;
-      border-radius: 5px;
-    }
-  }
-
-  .hero__date {
-    color: #fff;
-    margin-bottom: 1rem;
-    font-size: 0.80rem;
-  }
-
-  .hero__status {
-    color: #fff;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-  }
-
-  .hero__production-companies {
-    margin-top: 1rem;
-
-    h4 {
-      color: #fff;
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-
-      li {
-        display: flex;
-        align-items: center;
-        margin-bottom: 0.5rem;
-
-        img {
-          width: 30px;
-          height: 30px;
-          margin-right: 0.5rem;
-          border-radius: 5px;
-        }
-
-        span {
-          color: #fff;
-        }
-      }
-    }
-  }
-
-`
+          <Button
+            rounded={"none"}
+            w={"full"}
+            mt={8}
+            size={"lg"}
+            py={"7"}
+            bg={useColorModeValue("gray.900", "gray.50")}
+            color={useColorModeValue("white", "gray.900")}
+            textTransform={"uppercase"}
+            _hover={{
+              transform: "translateY(2px)",
+              boxShadow: "lg",
+            }}
+          >
+            Wacth
+          </Button>
+        </Stack>
+      </SimpleGrid>
+    </Container>
+  );
+};
 
 export default Detail;
