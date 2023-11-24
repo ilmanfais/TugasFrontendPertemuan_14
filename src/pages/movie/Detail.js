@@ -42,6 +42,8 @@ const Detail = () => {
     getDetail(id);
   }, [id]);
 
+  console.log(movie);
+
   return (
     <Container maxW={"7xl"}>
       <SimpleGrid
