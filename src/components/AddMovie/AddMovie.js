@@ -120,7 +120,8 @@ const AddMovieStyle = styled.div`
         justify-content: center;
         align-items: center;
         padding: 1rem;
-        background:  radial-gradient(circle, rgba(43,43,214,0.7517401392111369) 0%, rgba(165,165,171,1) 0%, rgba(129,123,133,1) 60%);
+        background: linear-gradient(90deg, rgba(52,150,63,1) 0%, rgba(0,0,0,1) 50%, rgba(52,150,63,1) 100%);
+      color: #fff;
         border-radius: 15px;
         color: white;
     }
