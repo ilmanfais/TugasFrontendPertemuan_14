@@ -27,13 +27,13 @@ const Hero = () => {
                             {movie.Title}
                         </Text>{' '}
                     </Heading>
-                    <Text fontSize={{ base: 'md', lg: 'lg' }} color={'red.300'}>
+                    <Text fontSize={{ base: 'md', lg: 'lg' }} >
                         {movie.Genre}
                     </Text>
-                    <Text fontSize={{ base: 'md', lg: 'lg' }} color={'white'}>
+                    <Text fontSize={{ base: 'md', lg: 'lg' }} >
                         {movie.Plot}
                     </Text>
-                    <Text fontSize={{ base: 'md', lg: 'lg' }} color={'white'}>
+                    <Text fontSize={{ base: 'md', lg: 'lg' }} >
                         {movie.Writer}
                     </Text>
                     <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
